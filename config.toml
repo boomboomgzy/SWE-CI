@@ -1,7 +1,7 @@
 experiment_name = ""                         # A unique ID used to distinguish experiments.
 splitting = "default"                        # Dataset solitting used in this experiment.
 save_root_dir = "."                          # The root directory for storing data and results.
-hf_token = ""                                # Used to speed up data download from HuggingFace. Setting it to "none" disables it.
+hf_token = "none"                                # Used to speed up data download from HuggingFace. Setting it to "none" disables it.
 hf_repo_id = "skylenage-ai/SWE-CI"           # The ID of the HuggingFace repository for the dataset.
 agent_name = "opencode"                      # CLI Agent for running the experiment. Choose form ["iflow"].
 api_key = ""                                 # Secret key for authenticating requests to LLM APIs.

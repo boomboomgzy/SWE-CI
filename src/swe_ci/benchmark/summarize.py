@@ -75,7 +75,7 @@ def metrics_func(
         rela_changes.append(change)
     evo_score = sum([c for c in rela_changes]) / target_len
 
-    solved_rate = float(max(seq_with_init) == target_pass)
+    resolved = float(max(seq_with_init) == target_pass)
 
     zero_regression = True
     for i in range(len(seq_with_init) - 1):
@@ -85,9 +85,10 @@ def metrics_func(
     zero_regression = float(zero_regression)
 
     return {
-        "EvoScore(gamma=1)": evo_score, 
-        "solved_rate": solved_rate,
-        "zero_regression": zero_regression,
+        "EvoScore(γ=1)": evo_score, 
+        "Resolved": resolved,
+        "Zero_reg.": zero_regression,
+        "ZRR": float(resolved and zero_regression)
     }
 
 
