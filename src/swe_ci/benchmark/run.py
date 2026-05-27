@@ -73,9 +73,10 @@ def _run_locked(
             self_path.parent / CONFIG.agent.dockerfile,
             extra_args = image_extra_args(base_image_tag)
             )
+        mode = CONFIG.mode
         prompt_file = self_path.parent / "prompt.jinja2"
-        architect_prompt = load_prompt(prompt_file, template_args = {'role': 'architect'})
-        programmer_prompt = load_prompt(prompt_file,template_args = {'role': 'programmer'})
+        architect_prompt = load_prompt(prompt_file, template_args = {'role': 'architect', "mode": mode})
+        programmer_prompt = load_prompt(prompt_file,template_args = {'role': 'programmer', "mode": mode})
     except Exception as e:
         info = f"❌ Error occurred when loading resources: {repr(e)}"
         logger.exception(info)
@@ -124,12 +125,16 @@ def _run_locked(
                 try:
                     run_container(image_tag, container_name, extra_args=CONTAINER_EXTRA_ARGS)
                     copy_dir_to_container(container_name, current_dir/"code", "/app")
+                    if CONFIG.mode == "rdd":
+                        remove_item_from_container(container_name, "/app/code/tests")
                     copy_file_to_container(container_name, current_dir/"requirement.xml", "/app")
                     programmer_result = call_cli_agent(
                         container_name, programmer_prompt, 
                         timeout=CONFIG.evolve.programmer.timeout
                         )
                     copy_dir_from_container(container_name, "/app/code", tmp_dir, mkdir=True)
+                    if CONFIG.mode == "rdd":
+                        shutil.copytree(current_dir/"code"/"tests", tmp_dir/"code"/"tests")
                     logger.info(prefix + "✅ The programmer agent has modified the code.")
                     break
                 except Exception as e:

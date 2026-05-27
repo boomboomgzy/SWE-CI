@@ -100,6 +100,13 @@ def load_config() -> SimpleNamespace:
     add_arguments_recursive(doc) 
     cfg = parser.parse_args()
 
+    if not hasattr(cfg, "mode"):
+        cfg.mode = "tdd"
+    if cfg.mode.lower() not in ["tdd", "rdd"]:
+        print(f"The operating mode should be either 'tdd' (Test Driven Development) or 'rdd' (Requirements Driven Development).", flush=True)
+        sys.exit(1)
+    cfg.mode = cfg.mode.lower()
+
     if not hasattr(cfg, "docker"): 
         cfg.docker = SimpleNamespace(storage_disk="")
     if cfg.docker.storage_disk == "":
