@@ -6,12 +6,6 @@ English | [中文](README_zh.md)
 
 🔗 Paper: https://arxiv.org/pdf/2603.03823
 
-💡 We are developing [Otter](https://github.com/GalenChen320/Otter/tree/main), an agent evaluation framework based on multi-turn environment feedback. SWE-CI will be more comprehensively supported within Otter in the near future.
-
-⚠️ **Clarification**: 
-1. "233 days" refers to the historical span of the **data source** for each task, NOT the actual runtime of the experiment.
-2. "Regression" does not imply persistent deterioration — models may recover from regressions in later iterations.
-
 ## Introduction
 ![](docs/1.png)
 
@@ -154,9 +148,17 @@ PYTHONPATH=src nohup python -u -m swe_ci.evaluate \
 ⚠️ It is normal for individual tasks to fail due to unexpected situations (e.g., API key concurrency limits exceeded, or inappropriate agent modifications causing code execution timeouts). In most cases, this can be resolved by re-running the experiment.
 
 ### 📄 Viewing Experiment Results
-You can view experiment results by specifying the `--experiment_name` and `--splitting` parameters:
+You can view experiment results by using the `swe_ci.summarize` command and specifying the `--experiment_name` and `--splitting` parameters:
 ```bash
 PYTHONPATH=src python -m swe_ci.summarize \
+    --experiment_name <EXPERIMENT_NAME> \
+    --splitting <SPLITTING>
+```
+
+### 🧹 Clearing Unfinished Tasks
+You can clean up unfinished or failed tasks by using the `swe_ci.clear` command and specifying the `--experiment_name` and `--splitting` parameters. The command will list all unfinished tasks and prompt for confirmation before removal:
+```bash
+PYTHONPATH=src python -m swe_ci.clear \
     --experiment_name <EXPERIMENT_NAME> \
     --splitting <SPLITTING>
 ```

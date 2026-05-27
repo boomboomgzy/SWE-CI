@@ -6,12 +6,6 @@
 
 🔗 论文链接: https://arxiv.org/pdf/2603.03823
 
-💡 我们正在开发基于多轮环境反馈的 Agent 评测框架 [Otter](https://github.com/GalenChen320/Otter/tree/main)。在不远的将来，SWE-CI 会在 Otter 中得到更全面的支持。
-
-⚠️ **澄清**：
-1. "233天"指的是每个任务**数据来源**的历史跨度，而非实验的实际运行时间。
-2. "回退"并不意味着持续恶化——模型可能会在后续迭代中从回退中恢复。
-
 ## 介绍
 ![](docs/1.png)
 
@@ -153,9 +147,17 @@ PYTHONPATH=src nohup python -u -m swe_ci.evaluate \
 ⚠️ 由于某些意外情况（如：API Key的并发数超过限制，或Agent的不恰当的修改使得代码运行超时）导致个别任务执行失败属于正常现象。大多数情况下可以通过重新运行试验解决。
 
 ### 📄 查看试验结果
-您可以通过指定 ` --experiment_name` 和 `--splitting` 参数来查看试验结果。
+您可以通过 `swe_ci.ummarize` 命令，并指定 ` --experiment_name` 和 `--splitting` 参数来查看试验结果。
 ```bash
 PYTHONPATH=src python -m swe_ci.summarize \
+    --experiment_name <EXPERIMENT_NAME> \
+    --splitting <SPLITTING>
+```
+
+### 🧹 清理未完成的任务
+您可以通过 `swe_ci.clear` 命令，并指定 `--experiment_name` 和 `--splitting` 参数来清理实验中未完成或失败的任务。该命令会列出所有未完成的任务并在删除前提示确认：
+```bash
+PYTHONPATH=src python -m swe_ci.clear \
     --experiment_name <EXPERIMENT_NAME> \
     --splitting <SPLITTING>
 ```
