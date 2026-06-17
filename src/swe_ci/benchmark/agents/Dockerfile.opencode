@@ -10,6 +10,7 @@ ARG AGENT_BIN=opencode
 ARG AGENT_HOME=/opt/agent
 
 RUN set -eux; \
+    sed -i s@/archive.ubuntu.com/@/mirrors.aliyun.com/@g /etc/apt/sources.list \
     apt-get update; \
     apt-get install -y --no-install-recommends ca-certificates curl xz-utils tar dpkg git; \
     \
