@@ -84,11 +84,14 @@ def cold_test(
         extra_args = CONTAINER_EXTRA_ARGS,
         overwrite=True
         )
+    #把代码copy进容器
     copy_dir_to_container(container_name, repo_dir, "/app", contents_only=False)
     rename_container_dir(container_name, f"/app/{Path(repo_dir).name}", "codes")
     result = run_pytest(container_name, "/app/codes", report_path=container_report)
     report_path = Path(report_path)
+    #把test_report从容器中取出
     copy_file_from_container(container_name, container_report, report_path.parent, rename=report_path.name)
+    #test后会删除容器和镜像
     if has_container(container_name):
         remove_container(container_name)
     if has_image(image_tag):

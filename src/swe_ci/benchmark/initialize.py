@@ -51,6 +51,7 @@ def _init(
         checkout(target_dir / "code", task_metadata["target_sha"])
         remove_pattern_files(current_dir / "code", [".git*", "test", "tests"])
         remove_pattern_files(target_dir / "code", [".git*", "test"])
+        #直接把target中的test 放入到current中 也就是整个过程 test是不变的 都是target的那份
         shutil.copytree(target_dir / "code" / "tests", current_dir / "code" / "tests")
         logger.info("(1/5) ✅ Extracted the 'current' and 'target' directories.")
     except Exception as e:
@@ -72,6 +73,7 @@ def _init(
             logger.error(info + f"\nreturncode={curr_result.returncode}, stderr={curr_result.stderr}")
             raise RuntimeError(info)
         report = json.loads((current_dir / "test_report.json").read_text("utf-8"))
+        #取出所有通过的测试用例的id
         current_passed = [n["nodeid"] for n in report["tests"] if n["outcome"] == "passed"]
     except Exception as e:
         info = f"(2/5) ❌ Error occurred when running pytest in directory 'current': {repr(e)}"
@@ -108,6 +110,7 @@ def _init(
         logger.warning(f"⚠️ Expected gap = {expected_gap}, but got {gap}.")
 
     # Generate non-passed directory by comparing two reports
+    # 记录没有通过的测试用例
     try:
         gap = generate_nonpassed_dir(current_dir / "test_report.json", target_dir / "test_report.json", current_dir)    
     except Exception as e:

@@ -179,8 +179,8 @@ def _run_locked(
             if keep_this_epoch:
                 gap = generate_nonpassed_dir(tmp_dir/"test_report.json", task_dir/"target"/"test_report.json", tmp_dir)
                 logger.info("(5/7) ✅ Generated directory 'nonpassed'.")
-                current_dir.rename(task_dir / now)
-                (task_dir / "tmp").rename(current_dir)
+                current_dir.rename(task_dir / now) 
+                (task_dir / "tmp").rename(current_dir) 
                 logger.info("(6/7) ✅ Archived directory 'current', and rename directory 'tmp' to 'current'.")
                 update_iteration(
                     gap, task_dir / "iteration.jsonl", current_dir / "test_report.json",
@@ -190,7 +190,7 @@ def _run_locked(
             else:
                 gap = -1
                 logger.info("(5/7) ✅ Skip this step.")
-                (task_dir / "tmp").rename(task_dir / now)
+                (task_dir / "tmp").rename(task_dir / now) 
                 logger.info("(6/7) ✅ Archived directory 'tmp'.")
                 update_iteration(
                     -1, task_dir / "iteration.jsonl", None,

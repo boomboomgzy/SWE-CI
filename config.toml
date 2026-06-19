@@ -7,7 +7,9 @@ agent_name = "opencode"                      # CLI Agent for running the experim
 api_key = ""                                 # Secret key for authenticating requests to LLM APIs.
 base_url = ""                                # The base URL of the API endpoint for LLM services.
 model_name = ""                              # The specific name or ID of the LLM to be invoked.
-mode = "tdd"                                 # Choose form ["tdd", "rdd"].
+mode = "tdd"                                 # Choose form ["tdd", "rdd"]. 
+#rdd 就是 需求驱动开发 (Programmer Agent 只有需求文档 不能看test) 
+#tdd 就是 测试驱动开发（Programmer Agent 有需求文档 也可以看test）                 
 
 [agent]
 node_version = ""                            # The version of NODE required to install the CLI Agent.

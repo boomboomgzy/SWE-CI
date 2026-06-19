@@ -193,11 +193,11 @@ def copy_dir_to_container(
     dst_dir_s = str(dst_dir).rstrip("/")
     if not has_container_dir(container_name, dst_dir_s):
         make_container_dir(container_name, dst_dir_s)
-    if contents_only:
+    if contents_only:#只拷贝src_dir下所有内容
         if not is_container_dir_empty(container_name, dst_dir_s):
             raise RuntimeError(f"Directory not empty: {dst_dir_s}")
         src_path = str(src_dir.absolute()).rstrip("/") + "/."
-    else:
+    else:#直接拷贝src_dir
         src_path = str(src_dir.absolute())
     subprocess.run([
         "docker", "cp", src_path, f"{container_name}:{dst_dir_s}/"
