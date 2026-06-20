@@ -1,4 +1,5 @@
 import json
+import shutil
 import sqlite3
 import tempfile
 import subprocess
@@ -109,7 +110,9 @@ def read_usage(db_path: str) -> dict:
 
 def valid_and_parse(
         container_name: str,
-        result: subprocess.CompletedProcess
+        result: subprocess.CompletedProcess,
+        *,
+        save_db_to: Path | None = None,
         ) -> dict:
 
     if result.returncode != 0:
@@ -137,6 +140,10 @@ def valid_and_parse(
                     capture_output=True, text=True,
                 )
             usage = read_usage(str(local_db))
+            if save_db_to is not None:
+                save_db_to = Path(save_db_to)
+                save_db_to.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy(local_db, save_db_to)
             return usage
     except Exception as e:
         raise RuntimeError(
@@ -151,8 +158,9 @@ def call_opencode(
         *,
         work_dir: str = "/app",
         timeout: int,
+        save_db_to: Path | None = None,
         ) -> subprocess.CompletedProcess:
-    
+
     setup_opencode(container_name)
     result = subprocess.run([
         "docker", "exec", "-w", work_dir,
@@ -164,4 +172,4 @@ def call_opencode(
         text=True,
         timeout=timeout,
     )
-    return valid_and_parse(container_name, result)
+    return valid_and_parse(container_name, result, save_db_to=save_db_to)

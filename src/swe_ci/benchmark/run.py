@@ -102,8 +102,9 @@ def _run_locked(
                     copy_dir_to_container(container_name, current_dir/"code", "/app")
                     copy_dir_to_container(container_name, current_dir/"non-passed", "/app")
                     architect_result = call_cli_agent(
-                        container_name, architect_prompt, 
-                        timeout=CONFIG.evolve.architect.timeout
+                        container_name, architect_prompt,
+                        timeout=CONFIG.evolve.architect.timeout,
+                        save_db_to=task_dir / "db" / f"opencode_epoch{current_epoch+1}_architect.db"
                         )
                     copy_file_from_container(container_name, "/app/requirement.xml", current_dir)
                     logger.info(prefix + "✅ The architect agent has generated the requirements.")
@@ -129,8 +130,9 @@ def _run_locked(
                         remove_item_from_container(container_name, "/app/code/tests")
                     copy_file_to_container(container_name, current_dir/"requirement.xml", "/app")
                     programmer_result = call_cli_agent(
-                        container_name, programmer_prompt, 
-                        timeout=CONFIG.evolve.programmer.timeout
+                        container_name, programmer_prompt,
+                        timeout=CONFIG.evolve.programmer.timeout,
+                        save_db_to=task_dir / "db" / f"opencode_epoch{current_epoch+1}_programmer.db"
                         )
                     copy_dir_from_container(container_name, "/app/code", tmp_dir, mkdir=True)
                     if CONFIG.mode == "rdd":
